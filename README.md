@@ -1,3 +1,4 @@
 # python_async
-1. flask run
-2. run use_threads.py
+1. install requirements
+2. ```flask run```
+3. ```python use_threads.py```
