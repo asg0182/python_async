@@ -67,7 +67,8 @@ class UrlTask(Task):
             status = data["status"]
             if status == "success":
                 self.set_result(result=data)
-                return
+                break
+        return
 
 class TaskExecutor:
     def __init__(self, max_workers=4):
@@ -98,6 +99,7 @@ class TaskExecutor:
     def start(self):
         for _ in range(self.max_workers):
             worker = threading.Thread(target=self._worker)
+            worker.daemon = True
             worker.start()
             self.workers.append(worker)
 
@@ -112,7 +114,7 @@ class TaskExecutor:
     def stop(self):
         self._stopped = True
         for worker in self.workers:
-            worker.join()
+            worker.join(timeout=3)
 
 
 if __name__ == "__main__":
@@ -128,4 +130,4 @@ if __name__ == "__main__":
     executor.stop()
 
     for result in results:
-        logger.info(f"{result}")
+        logger.info(f" Result: {result}")
